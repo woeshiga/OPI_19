@@ -4,6 +4,21 @@
 import sys
 import json
 from datetime import date
+import jsonschema
+import marshmallow
+
+schema = {
+    "type": "object",
+    "name": {"type": "string"},
+    "post": {"type": "string"},
+    "year": {"type": "integer"}
+}
+
+
+class StuffSchema(marshmallow.Schema):
+    name = marshmallow.fields.String()
+    post = marshmallow.fields.String()
+    year = marshmallow.fields.Integer()
 
 
 def get_worker() -> dict:
@@ -85,8 +100,10 @@ def save_workers(file_name: str, staff):
     :param staff:
     :return:
     """
+
+    jsonschema.validate(staff, schema=schema)
     with open(file_name, 'w', encoding='utf-8') as fout:
-        json.dump(staff, fout, ensure_ascii=False, indent=4)
+        json.dump(StuffSchema().dumps(staff), fout, ensure_ascii=False, indent=4)
 
 
 def load_workers(file_name: str) -> dict:

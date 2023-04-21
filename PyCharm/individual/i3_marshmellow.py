@@ -2,22 +2,19 @@
 # -*- coding: utf-8 -*-
 
 """
-Валидация с использоваением jsonschema
+Валидация с использоваением Marshmallow
 """
 
 import sys
 import json
 from datetime import date
-import jsonschema
+import marshmallow
 
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "post": {"type": "string"},
-        "year": {"type": "integer"}
-    }
-}
+
+class StuffSchema(marshmallow.Schema):
+    name = marshmallow.fields.String()
+    post = marshmallow.fields.String()
+    year = marshmallow.fields.Integer()
 
 
 def get_worker() -> dict:
@@ -111,11 +108,10 @@ def load_workers(file_name: str) -> list:
     :return dict:
     """
     with open(file_name, 'r', encoding='utf-8') as fin:
-        data = json.load(fin)
+        schema = StuffSchema()
         res = list()
-        for rec in data:
-            jsonschema.validate(rec, schema=schema)
-            res.append(rec)
+        for rec in json.load(fin):
+            res.append(schema.load(rec))
         return res
 
 

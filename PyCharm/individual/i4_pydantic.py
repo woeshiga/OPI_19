@@ -2,22 +2,19 @@
 # -*- coding: utf-8 -*-
 
 """
-Валидация с использоваением jsonschema
+Валидация с использоваением Pydantic
 """
 
 import sys
 import json
 from datetime import date
-import jsonschema
+import pydantic
 
-schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "post": {"type": "string"},
-        "year": {"type": "integer"}
-    }
-}
+
+class Stuff(pydantic.BaseModel):
+    name: str
+    post: str
+    year: int
 
 
 def get_worker() -> dict:
@@ -111,11 +108,10 @@ def load_workers(file_name: str) -> list:
     :return dict:
     """
     with open(file_name, 'r', encoding='utf-8') as fin:
-        data = json.load(fin)
+        json_data = json.load(fin)
         res = list()
-        for rec in data:
-            jsonschema.validate(rec, schema=schema)
-            res.append(rec)
+        for rec in json_data:
+            res.append(Stuff(name=rec['name'], post=rec['post'], year=rec['year']).dict())
         return res
 
 

@@ -30,11 +30,6 @@ def update_json(file_name: str, words: list) -> list:
 
 
 def display(words):
-    """
-    Отобразить список работников.
-    :param staff:
-    :return:
-    """
     if words:
         line = '+-{}-+-{}-+-{}-+'.format(
             '-' * 4,

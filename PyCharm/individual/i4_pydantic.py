@@ -106,13 +106,16 @@ def load_workers(file_name: str) -> list:
     Загрузить всех работников из файла JSON.
     :param file_name:
     :return dict:
-    """
+    # """
+    # with open(file_name, 'r', encoding='utf-8') as fin:
+    #     json_data = json.load(fin)
+    #     res = list()
+    #     for rec in json_data:
+    #         res.append(Stuff(name=rec['name'], post=rec['post'], year=rec['year']).dict())
+    #     return res
     with open(file_name, 'r', encoding='utf-8') as fin:
-        json_data = json.load(fin)
-        res = list()
-        for rec in json_data:
-            res.append(Stuff(name=rec['name'], post=rec['post'], year=rec['year']).dict())
-        return res
+        data = json.load(fin)
+    print(pydantic.parse_obj_as(, data))
 
 
 def main():

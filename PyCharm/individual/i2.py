@@ -11,11 +11,14 @@ from datetime import date
 import jsonschema
 
 schema = {
-    "type": "object",
-    "properties": {
-        "name": {"type": "string"},
-        "post": {"type": "string"},
-        "year": {"type": "integer"}
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "name": {"type": "string"},
+            "post": {"type": "string"},
+            "year": {"type": "integer"}
+        }
     }
 }
 
@@ -112,11 +115,8 @@ def load_workers(file_name: str) -> list:
     """
     with open(file_name, 'r', encoding='utf-8') as fin:
         data = json.load(fin)
-        res = list()
-        for rec in data:
-            jsonschema.validate(rec, schema=schema)
-            res.append(rec)
-        return res
+    jsonschema.validate(data, schema=schema)
+    return data
 
 
 def main():

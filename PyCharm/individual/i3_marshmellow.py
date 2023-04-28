@@ -17,6 +17,7 @@ class StuffSchema(marshmallow.Schema):
     year = marshmallow.fields.Integer()
 
 
+
 def get_worker() -> dict:
     """
     Запросить данные о работнике.
@@ -109,10 +110,7 @@ def load_workers(file_name: str) -> list:
     """
     with open(file_name, 'r', encoding='utf-8') as fin:
         schema = StuffSchema()
-        res = list()
-        for rec in json.load(fin):
-            res.append(schema.load(rec))
-        return res
+        return schema.load(json.load(fin), many=True)
 
 
 def main():
